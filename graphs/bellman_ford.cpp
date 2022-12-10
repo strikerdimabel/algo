@@ -10,17 +10,17 @@ const double EPS = 1e-12;
 /**
  * Double infinity.
  */
-const double INF = numeric_limits<double>::infinity();
+const double INF = DBL_MAX;
 
 
 struct Edge {
     /**
-     * An index of the first vertex.
+     * An index of the first vertex, 0-based
      */
     int first_id;
 
     /**
-     * An index of the second vertex.
+     * An index of the second vertex, 0-based
      */
     int second_id;
 
@@ -37,18 +37,18 @@ struct Edge {
     }
 
     bool is_new_cost_better(double old_cost, double new_cost) const {
-        return new_cost < old_cost && abs(new_cost - old_cost) > DBL_EPSILON;
+        return new_cost < old_cost && abs(new_cost - old_cost) > EPS;
     }
 };
 
 /**
  * Returns NULL if there is a "negative" cycle.
- * Otherwise, returns a best cost to reach each vertex.
+ * Otherwise, returns a best cost to reach each vertex from vertex x.
  * n - vertices count - the size of initial_costs.
  * m - edges count - the size of edges.
  * Complexity: n*m.
  */
-double* get_best_costs(int n, const double* initial_costs, int m, const Edge* edges) {
+double* _get_best_costs(int n, const double* initial_costs, int m, const Edge* edges) {
     double* costs = new double[n];
     copy(initial_costs, initial_costs + n, costs);
     bool changed;
@@ -72,7 +72,7 @@ double* get_best_costs(int n, const double* initial_costs, int m, const Edge* ed
 /**
  * Returns NULL if there is a "negative" cycle.
  * Otherwise, returns a best cost to reach each vertex from x.
- * x - a vertex to start from
+ * x - a vertex to start from, 0-based
  * n - vertices count - the size of initial_costs
  * m - edges count - the size of edges
  * Complexity: n*m.
@@ -84,7 +84,7 @@ double* get_best_costs(int n, int x, int m, const Edge* edges) {
     initial_costs[x] = 0;
 
     // Run
-    double* best_costs = get_best_costs(n, initial_costs, m, edges);
+    double* best_costs = _get_best_costs(n, initial_costs, m, edges);
     
     // Cleanup
     delete[] initial_costs;

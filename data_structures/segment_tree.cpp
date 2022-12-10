@@ -5,13 +5,13 @@ using namespace std;
 /**
  * vertex is 1-based
  */
-void build_segment_tree(int* values, int* res, int vertex, int from, int to) {
+void _build_segment_tree(int* values, int* res, int vertex, int from, int to) {
 	if (from == to)
 		res[vertex] = values[from];
 	else {
 		int mid = (from + to) / 2;
-		build_segment_tree(values, res, vertex * 2, from, mid);
-		build_segment_tree(values, res, vertex * 2 + 1, mid + 1, to);
+		_build_segment_tree(values, res, vertex * 2, from, mid);
+		_build_segment_tree(values, res, vertex * 2 + 1, mid + 1, to);
 		res[vertex] = res[vertex * 2] + res[vertex * 2 + 1];
 	}
 }
@@ -21,7 +21,7 @@ void build_segment_tree(int* values, int* res, int vertex, int from, int to) {
  */
 int* build_segment_tree(int* values, int n) {
     int* res = new int[4 * n];
-    build_segment_tree(values, res, 1, 0, n - 1);
+    _build_segment_tree(values, res, 1, 0, n - 1);
     return res;
 }
 
